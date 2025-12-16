@@ -1,0 +1,34 @@
+package com.cagataysunal.restaurantordertracker.ui.registration
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.cagataysunal.restaurantordertracker.data.dto.UserRegistrationRequest
+import com.cagataysunal.restaurantordertracker.domain.usecase.RegisterUserUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+class RegistrationViewModel(private val registerUserUseCase: RegisterUserUseCase) : ViewModel() {
+
+    private val _registrationState = MutableStateFlow<RegistrationState>(RegistrationState.Idle)
+    val registrationState: StateFlow<RegistrationState> = _registrationState
+
+    fun registerUser(request: UserRegistrationRequest) {
+        viewModelScope.launch {
+            _registrationState.value = RegistrationState.Loading
+            val success = registerUserUseCase(request)
+            _registrationState.value = if (success) {
+                RegistrationState.Success
+            } else {
+                RegistrationState.Error("Registration failed")
+            }
+        }
+    }
+}
+
+sealed class RegistrationState {
+    object Idle : RegistrationState()
+    object Loading : RegistrationState()
+    object Success : RegistrationState()
+    data class Error(val message: String) : RegistrationState()
+}
