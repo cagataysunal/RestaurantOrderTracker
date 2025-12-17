@@ -1,5 +1,8 @@
 package com.cagataysunal.restaurantordertracker.data.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class UserRegistrationRequest(
     val username: String,
     val email: String,
