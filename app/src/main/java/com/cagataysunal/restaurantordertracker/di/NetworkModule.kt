@@ -16,9 +16,12 @@ import io.ktor.http.contentType
 import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.flow.first
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 import org.koin.dsl.module
 
+@OptIn(ExperimentalSerializationApi::class)
 val networkModule = module {
     val baseUrl = "http://188.34.155.223/new-qr-menu/api/"
     single {
@@ -32,11 +35,15 @@ val networkModule = module {
                 contentType(ContentType.Application.Json)
             }
             install(ContentNegotiation) {
-                json(Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                })
+                json(
+                    Json {
+                        encodeDefaults = true
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                        namingStrategy = JsonNamingStrategy.SnakeCase
+                    }
+                )
             }
             install(Auth) {
                 bearer {
