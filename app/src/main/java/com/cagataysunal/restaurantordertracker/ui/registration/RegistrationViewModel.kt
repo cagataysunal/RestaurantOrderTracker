@@ -16,8 +16,8 @@ class RegistrationViewModel(private val registerUserUseCase: RegisterUserUseCase
     fun registerUser(request: UserRegistrationRequest) {
         viewModelScope.launch {
             _registrationState.value = RegistrationState.Loading
-            val success = registerUserUseCase(request)
-            _registrationState.value = if (success) {
+            val response = registerUserUseCase(request)
+            _registrationState.value = if (response.success) {
                 RegistrationState.Success
             } else {
                 RegistrationState.Error("Registration failed")

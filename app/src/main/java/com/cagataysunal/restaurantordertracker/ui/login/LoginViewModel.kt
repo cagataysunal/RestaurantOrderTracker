@@ -2,6 +2,7 @@ package com.cagataysunal.restaurantordertracker.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cagataysunal.restaurantordertracker.domain.model.LoginResult
 import com.cagataysunal.restaurantordertracker.domain.usecase.LoginUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,11 +18,11 @@ class LoginViewModel(
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
-            try {
-                loginUserUseCase(email, password)
-                _loginState.value = LoginState.Success
-            } catch (e: Exception) {
-                _loginState.value = LoginState.Error(e.message ?: "An error occurred")
+            when (val result = loginUserUseCase(email, password)) {
+                is LoginResult.Success -> _loginState.value = LoginState.Success
+                is LoginResult.Fail -> _loginState.value = LoginState.Error(result.message)
+                is LoginResult.Error -> _loginState.value =
+                    LoginState.Error(result.exception.message ?: "An unknown error occurred")
             }
         }
     }
