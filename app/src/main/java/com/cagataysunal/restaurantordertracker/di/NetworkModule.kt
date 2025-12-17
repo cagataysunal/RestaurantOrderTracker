@@ -1,6 +1,5 @@
 package com.cagataysunal.restaurantordertracker.di
 
-import com.cagataysunal.restaurantordertracker.data.local.SessionProvider
 import com.cagataysunal.restaurantordertracker.data.remote.ApiService
 import com.cagataysunal.restaurantordertracker.data.remote.ApiServiceImpl
 import com.cagataysunal.restaurantordertracker.data.repository.TokenProviderImpl
@@ -20,7 +19,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.flow.first
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
@@ -31,7 +29,7 @@ import timber.log.Timber
 val networkModule = module {
     val baseUrl = "http://188.34.155.223/new-qr-menu/"
     single {
-        val sessionProvider: SessionProvider = get()
+        val tokenProvider: TokenProvider = get()
         HttpClient(Android) {
             install(Logging) {
                 logger = object : Logger {
@@ -59,7 +57,7 @@ val networkModule = module {
             install(Auth) {
                 bearer {
                     loadTokens {
-                        val token = sessionProvider.authToken.first()
+                        val token = tokenProvider.getToken()
                         if (token != null) {
                             BearerTokens(token, "")
                         } else {
@@ -77,5 +75,5 @@ val networkModule = module {
 
     single<ApiService> { ApiServiceImpl(get()) }
     single<TokenProvider> { TokenProviderImpl(get()) }
-    single { PusherManager(get(), get()) }
+    single { PusherManager(get()) }
 }

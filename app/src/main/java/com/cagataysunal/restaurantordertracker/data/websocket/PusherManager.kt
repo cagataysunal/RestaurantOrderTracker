@@ -1,7 +1,6 @@
 package com.cagataysunal.restaurantordertracker.data.websocket
 
 import com.cagataysunal.restaurantordertracker.BuildConfig
-import com.cagataysunal.restaurantordertracker.domain.repository.TokenProvider
 import com.pusher.client.ChannelAuthorizer
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
@@ -22,19 +21,13 @@ import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import timber.log.Timber
 
-class CustomAuthorizer(
-    private val client: HttpClient,
-    private val tokenProvider: TokenProvider,
-) : ChannelAuthorizer {
+class CustomAuthorizer(private val client: HttpClient) : ChannelAuthorizer {
     override fun authorize(channelName: String, socketId: String): String {
         return try {
-            val token = tokenProvider.getToken()
             runBlocking {
                 val response: HttpResponse =
                     client.post("http://188.34.155.223/new-qr-menu/api/broadcasting/auth") {
                         contentType(ContentType.Application.Json)
-                        header("Authorization", "Bearer $token")
-                        header("Accept", "application/json")
                         header("X-Requested-With", "XMLHttpRequest")
                         setBody(mapOf("socket_id" to socketId, "channel_name" to channelName))
                     }
@@ -52,14 +45,11 @@ class CustomAuthorizer(
 private const val HOST = "188.34.155.223"
 private const val WS_PORT = 6001
 
-class PusherManager(
-    private val tokenProvider: TokenProvider,
-    private val httpClient: HttpClient
-) {
+class PusherManager(private val httpClient: HttpClient) {
     private lateinit var pusher: Pusher
 
     fun init(restaurantId: String) {
-        val authorizer = CustomAuthorizer(httpClient, tokenProvider)
+        val authorizer = CustomAuthorizer(httpClient)
 
         val options = PusherOptions().apply {
             setHost(HOST)
