@@ -5,6 +5,8 @@ import com.cagataysunal.restaurantordertracker.domain.repository.TokenProvider
 import com.pusher.client.ChannelAuthorizer
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
+import com.pusher.client.channel.PrivateChannelEventListener
+import com.pusher.client.channel.PusherEvent
 import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
@@ -25,9 +27,9 @@ class CustomAuthorizer(
     private val tokenProvider: TokenProvider,
 ) : ChannelAuthorizer {
     override fun authorize(channelName: String, socketId: String): String {
-        return runBlocking {
-            try {
-                val token = tokenProvider.getToken()
+        return try {
+            val token = tokenProvider.getToken()
+            runBlocking {
                 val response: HttpResponse =
                     client.post("http://188.34.155.223/new-qr-menu/api/broadcasting/auth") {
                         contentType(ContentType.Application.Json)
@@ -39,10 +41,10 @@ class CustomAuthorizer(
                 val responseBody = response.bodyAsText()
                 // Assuming the response is a JSON with a field "auth"
                 JSONObject(responseBody).getString("auth")
-            } catch (e: Exception) {
-                Timber.e(e, "Pusher authentication failed")
-                throw e
             }
+        } catch (e: Exception) {
+            Timber.e(e, "Pusher authentication failed")
+            throw e
         }
     }
 }
@@ -84,12 +86,26 @@ class PusherManager(
 
     private fun subscribeToChannel(restaurantId: String) {
         val channelName = "private-restaurant.$restaurantId"
-        pusher.subscribePrivate(channelName).let { channel ->
-            channel.bind("order.created") { event ->
-                Timber.d("Order created event received: ${event.data}")
-                // TODO: Handle the event, e.g., parse the data and notify the app
+
+        val listener = object : PrivateChannelEventListener {
+            override fun onEvent(event: PusherEvent) {
+                if (event.eventName == "order.created") {
+                    Timber.d("Order created event received: ${event.data}")
+                    // TODO: Handle the event, e.g., parse the data and notify the app
+                }
+            }
+
+            override fun onAuthenticationFailure(message: String, e: Exception) {
+                Timber.e(e, "Pusher authentication failed for channel $channelName: $message")
+            }
+
+            override fun onSubscriptionSucceeded(channelName: String) {
+                Timber.d("Successfully subscribed to private channel: $channelName")
             }
         }
+
+        // 2. Subscribe to the private channel and bind the new listener
+        pusher.subscribePrivate(channelName, listener, "order.created")
     }
 
     fun disconnect() {
