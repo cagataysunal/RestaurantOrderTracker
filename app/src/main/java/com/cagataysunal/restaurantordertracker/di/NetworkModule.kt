@@ -23,11 +23,12 @@ import org.koin.dsl.module
 
 @OptIn(ExperimentalSerializationApi::class)
 val networkModule = module {
-    val baseUrl = "http://188.34.155.223/new-qr-menu/api/"
+    val baseUrl = "http://188.34.155.223/new-qr-menu/"
     single {
         val tokenManager: TokenManager = get()
         HttpClient(Android) {
             install(Logging) {
+                logger = Logger.ANDROID
                 level = LogLevel.ALL
             }
             defaultRequest {
