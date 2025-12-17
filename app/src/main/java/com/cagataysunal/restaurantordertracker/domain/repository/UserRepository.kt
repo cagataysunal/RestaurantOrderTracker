@@ -1,4 +1,4 @@
-package com.cagataysunal.restaurantordertracker.data.repository
+package com.cagataysunal.restaurantordertracker.domain.repository
 
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterResponse
 import com.cagataysunal.restaurantordertracker.data.dto.UserRegistrationRequest

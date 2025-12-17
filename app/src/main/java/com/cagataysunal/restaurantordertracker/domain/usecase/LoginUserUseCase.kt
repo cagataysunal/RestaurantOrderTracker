@@ -1,6 +1,6 @@
 package com.cagataysunal.restaurantordertracker.domain.usecase
 
-import com.cagataysunal.restaurantordertracker.data.repository.UserRepository
+import com.cagataysunal.restaurantordertracker.domain.repository.UserRepository
 import com.cagataysunal.restaurantordertracker.domain.model.LoginResult
 
 class LoginUserUseCase(

@@ -6,6 +6,7 @@ import com.cagataysunal.restaurantordertracker.data.dto.UserRegistrationRequest
 import com.cagataysunal.restaurantordertracker.data.local.TokenManager
 import com.cagataysunal.restaurantordertracker.data.remote.ApiService
 import com.cagataysunal.restaurantordertracker.domain.model.LoginResult
+import com.cagataysunal.restaurantordertracker.domain.repository.UserRepository
 
 class UserRepositoryImpl(
     private val apiService: ApiService,
