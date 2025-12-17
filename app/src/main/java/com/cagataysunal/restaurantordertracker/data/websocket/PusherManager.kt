@@ -32,12 +32,11 @@ class CustomAuthorizer(private val client: HttpClient) : ChannelAuthorizer {
                         setBody(mapOf("socket_id" to socketId, "channel_name" to channelName))
                     }
                 val responseBody = response.bodyAsText()
-                // Assuming the response is a JSON with a field "auth"
-                JSONObject(responseBody).getString("auth")
+                JSONObject(responseBody).optString("auth")
             }
         } catch (e: Exception) {
             Timber.e(e, "Pusher authentication failed")
-            throw e
+            ""
         }
     }
 }
@@ -94,7 +93,6 @@ class PusherManager(private val httpClient: HttpClient) {
             }
         }
 
-        // 2. Subscribe to the private channel and bind the new listener
         pusher.subscribePrivate(channelName, listener, "order.created")
     }
 
