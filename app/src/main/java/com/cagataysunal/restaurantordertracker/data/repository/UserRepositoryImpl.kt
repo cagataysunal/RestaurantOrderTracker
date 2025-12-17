@@ -13,7 +13,7 @@ class UserRepositoryImpl(
 ) : UserRepository {
     override suspend fun registerUser(request: UserRegistrationRequest): RegisterResponse {
         val response = apiService.registerUser(request)
-        if (response.success) {
+        if (response.success && response.token != null) {
             tokenManager.saveAuthToken(response.token)
         }
         return response
@@ -26,7 +26,7 @@ class UserRepositoryImpl(
                 tokenManager.saveAuthToken(response.token)
                 LoginResult.Success(response.token)
             } else {
-                LoginResult.Fail(response.message)
+                LoginResult.Fail(response.error?.getOrNull(0) ?: response.message)
             }
         } catch (e: Exception) {
             LoginResult.Error(e)

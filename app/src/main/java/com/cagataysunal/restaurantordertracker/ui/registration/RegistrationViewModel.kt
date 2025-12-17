@@ -20,7 +20,7 @@ class RegistrationViewModel(private val registerUserUseCase: RegisterUserUseCase
             _registrationState.value = if (response.success) {
                 RegistrationState.Success
             } else {
-                RegistrationState.Error("Registration failed")
+                RegistrationState.Error(response.error?.getOrNull(0) ?: response.message)
             }
         }
     }
