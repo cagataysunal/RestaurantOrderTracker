@@ -22,9 +22,17 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RegistrationScreen(
-    viewModel: RegistrationViewModel = koinViewModel()
+    viewModel: RegistrationViewModel = koinViewModel(),
+    onRegistrationSuccess: () -> Unit
 ) {
     val registrationState by viewModel.registrationState.collectAsState()
+
+    LaunchedEffect(registrationState) {
+        if (registrationState is RegistrationState.Success) {
+            onRegistrationSuccess()
+        }
+    }
+
     RegistrationContent(
         registrationState = registrationState,
         onRegister = { request -> viewModel.registerUser(request) }
@@ -189,11 +197,6 @@ fun RegistrationContent(
                 modifier = Modifier.padding(
                     top = 16.dp
                 )
-            )
-
-            is RegistrationState.Success -> Text(
-                "Registration successful!",
-                modifier = Modifier.padding(top = 16.dp)
             )
 
             is RegistrationState.Error -> Text(

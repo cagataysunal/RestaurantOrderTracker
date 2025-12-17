@@ -5,6 +5,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.cagataysunal.restaurantordertracker.ui.home.HomeScreen
 import com.cagataysunal.restaurantordertracker.ui.login.LoginScreen
 import com.cagataysunal.restaurantordertracker.ui.registration.RegistrationScreen
 import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
@@ -14,6 +15,7 @@ sealed class Screen(val route: String) {
     object Welcome : Screen("welcome")
     object Registration : Screen("registration")
     object Login : Screen("login")
+    object Home : Screen("home")
 }
 
 @Composable
@@ -27,10 +29,29 @@ fun AppNavigation() {
             )
         }
         composable(Screen.Registration.route) {
-            RegistrationScreen()
+            RegistrationScreen(
+                onRegistrationSuccess = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Welcome.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
         composable(Screen.Login.route) {
-            LoginScreen()
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Welcome.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+        composable(Screen.Home.route) {
+            HomeScreen()
         }
     }
 }
