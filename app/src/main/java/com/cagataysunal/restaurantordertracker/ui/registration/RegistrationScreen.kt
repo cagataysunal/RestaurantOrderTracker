@@ -217,7 +217,7 @@ fun RegistrationContent(
             )
 
             is RegistrationState.Error -> Text(
-                (registrationState as RegistrationState.Error).message,
+                registrationState.message,
                 modifier = Modifier.padding(top = 16.dp)
             )
 

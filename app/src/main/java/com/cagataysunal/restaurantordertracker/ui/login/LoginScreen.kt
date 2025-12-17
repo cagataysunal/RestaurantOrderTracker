@@ -129,7 +129,7 @@ fun LoginContent(
                 modifier = Modifier.padding(top = 16.dp)
             )
             is LoginState.Error -> Text(
-                (loginState as LoginState.Error).message,
+                loginState.message,
                 modifier = Modifier.padding(top = 16.dp)
             )
             else -> {}
