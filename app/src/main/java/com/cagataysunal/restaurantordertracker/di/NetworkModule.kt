@@ -6,18 +6,20 @@ import com.cagataysunal.restaurantordertracker.data.remote.ApiServiceImpl
 import com.cagataysunal.restaurantordertracker.data.repository.TokenProviderImpl
 import com.cagataysunal.restaurantordertracker.data.websocket.PusherManager
 import com.cagataysunal.restaurantordertracker.domain.repository.TokenProvider
-import io.ktor.client.*
-import io.ktor.client.engine.android.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
-import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.*
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.encodedPath
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -65,8 +67,8 @@ val networkModule = module {
                         }
                     }
                     sendWithoutRequest { request ->
-                        request.url.encodedPath.contains("/api/v1/customer/register") ||
-                                request.url.encodedPath.contains("/api/v1/customer/login")
+                        !(request.url.encodedPath.contains("/api/v1/customer/register") ||
+                                request.url.encodedPath.contains("/api/v1/customer/login"))
                     }
                 }
             }
