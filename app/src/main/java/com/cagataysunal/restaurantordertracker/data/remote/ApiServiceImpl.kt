@@ -3,9 +3,11 @@ package com.cagataysunal.restaurantordertracker.data.remote
 import com.cagataysunal.restaurantordertracker.data.dto.LoginRequest
 import com.cagataysunal.restaurantordertracker.data.dto.LoginResponse
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterResponse
+import com.cagataysunal.restaurantordertracker.data.dto.RestaurantInfo
 import com.cagataysunal.restaurantordertracker.data.dto.UserRegistrationRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -46,6 +48,15 @@ class ApiServiceImpl(private val client: HttpClient) : ApiService {
                 token = "",
                 error = listOf()
             )
+        }
+    }
+
+    override suspend fun getRestaurantInfo(): RestaurantInfo? {
+        return try {
+            client.get(ApiEndpoints.RESTAURANT_INFO).body<RestaurantInfo>()
+        } catch (e: Exception) {
+            Timber.tag(TAG).e(e, "Failed to get restaurant info: ${e.message}")
+            null
         }
     }
 }
