@@ -45,8 +45,30 @@ fun RegistrationContent(
     var businessPhone by remember { mutableStateOf("") }
     var businessEmail by remember { mutableStateOf("") }
 
+    var usernameError by remember { mutableStateOf<String?>(null) }
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
+    var passwordConfirmationError by remember { mutableStateOf<String?>(null) }
+    var phoneError by remember { mutableStateOf<String?>(null) }
+    var businessNameError by remember { mutableStateOf<String?>(null) }
+    var businessPhoneError by remember { mutableStateOf<String?>(null) }
+    var businessEmailError by remember { mutableStateOf<String?>(null) }
+
     var passwordVisible by remember { mutableStateOf(false) }
     var passwordConfirmationVisible by remember { mutableStateOf(false) }
+
+    fun validate(): Boolean {
+        usernameError = if (username.isBlank()) "Username is required" else null
+        emailError = if (email.isBlank()) "Email is required" else null
+        passwordError = if (password.length < 8) "Password must be at least 8 characters" else null
+        passwordConfirmationError = if (passwordConfirmation != password) "Passwords do not match" else null
+        phoneError = if (phone.isBlank()) "Phone is required" else null
+        businessNameError = if (businessName.isBlank()) "Business name is required" else null
+        businessPhoneError = if (businessPhone.isBlank()) "Business phone is required" else null
+        businessEmailError = if (businessEmail.isBlank()) "Business email is required" else null
+
+        return usernameError == null && emailError == null && passwordError == null && passwordConfirmationError == null && phoneError == null && businessNameError == null && businessPhoneError == null && businessEmailError == null
+    }
 
     Column(
         modifier = Modifier
@@ -63,26 +85,31 @@ fun RegistrationContent(
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = username,
-            onValueChange = { username = it },
-            label = { Text("Username") }
+            onValueChange = { username = it; usernameError = null },
+            label = { Text("Username") },
+            isError = usernameError != null,
+            supportingText = { usernameError?.let { Text(it) } }
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") }
+            onValueChange = { email = it; emailError = null },
+            label = { Text("Email") },
+            isError = emailError != null,
+            supportingText = { emailError?.let { Text(it) } }
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { password = it; passwordError = null },
             label = { Text("Password") },
+            isError = passwordError != null,
+            supportingText = { passwordError?.let { Text(it) } },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             trailingIcon = {
-                val image = if (passwordVisible)
-                    Icons.Filled.Visibility
-                else Icons.Filled.VisibilityOff
+                val image =
+                    if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                 val description = if (passwordVisible) "Hide password" else "Show password"
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(imageVector = image, description)
@@ -92,16 +119,20 @@ fun RegistrationContent(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = passwordConfirmation,
-            onValueChange = { passwordConfirmation = it },
+            onValueChange = { passwordConfirmation = it; passwordConfirmationError = null },
             label = { Text("Confirm Password") },
+            isError = passwordConfirmationError != null,
+            supportingText = { passwordConfirmationError?.let { Text(it) } },
             visualTransformation = if (passwordConfirmationVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             trailingIcon = {
-                val image = if (passwordConfirmationVisible)
-                    Icons.Filled.Visibility
-                else Icons.Filled.VisibilityOff
-                val description = if (passwordConfirmationVisible) "Hide password" else "Show password"
-                IconButton(onClick = { passwordConfirmationVisible = !passwordConfirmationVisible }) {
+                val image =
+                    if (passwordConfirmationVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                val description =
+                    if (passwordConfirmationVisible) "Hide password" else "Show password"
+                IconButton(onClick = {
+                    passwordConfirmationVisible = !passwordConfirmationVisible
+                }) {
                     Icon(imageVector = image, description)
                 }
             }
@@ -109,41 +140,51 @@ fun RegistrationContent(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = phone,
-            onValueChange = { phone = it },
-            label = { Text("Phone") }
+            onValueChange = { phone = it; phoneError = null },
+            label = { Text("Phone") },
+            isError = phoneError != null,
+            supportingText = { phoneError?.let { Text(it) } }
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = businessName,
-            onValueChange = { businessName = it },
-            label = { Text("Business Name") }
+            onValueChange = { businessName = it; businessNameError = null },
+            label = { Text("Business Name") },
+            isError = businessNameError != null,
+            supportingText = { businessNameError?.let { Text(it) } }
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = businessPhone,
-            onValueChange = { businessPhone = it },
-            label = { Text("Business Phone") }
+            onValueChange = { businessPhone = it; businessPhoneError = null },
+            label = { Text("Business Phone") },
+            isError = businessPhoneError != null,
+            supportingText = { businessPhoneError?.let { Text(it) } }
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = businessEmail,
-            onValueChange = { businessEmail = it },
-            label = { Text("Business Email") }
+            onValueChange = { businessEmail = it; businessEmailError = null },
+            label = { Text("Business Email") },
+            isError = businessEmailError != null,
+            supportingText = { businessEmailError?.let { Text(it) } }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                val request = UserRegistrationRequest(
-                    username,
-                    email,
-                    password,
-                    passwordConfirmation,
-                    phone,
-                    businessName,
-                    businessPhone,
-                    businessEmail
-                )
-                onRegister(request)
+                if (validate()) {
+                    val request = UserRegistrationRequest(
+                        username,
+                        email,
+                        password,
+                        passwordConfirmation,
+                        phone,
+                        businessName,
+                        businessPhone,
+                        businessEmail
+                    )
+                    onRegister(request)
+                }
             },
             enabled = registrationState != RegistrationState.Loading
         ) {
