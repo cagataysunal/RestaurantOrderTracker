@@ -1,6 +1,6 @@
 package com.cagataysunal.restaurantordertracker.di
 
-import com.cagataysunal.restaurantordertracker.data.local.TokenManager
+import com.cagataysunal.restaurantordertracker.data.local.SessionProvider
 import com.cagataysunal.restaurantordertracker.data.remote.ApiService
 import com.cagataysunal.restaurantordertracker.data.remote.ApiServiceImpl
 import com.cagataysunal.restaurantordertracker.data.repository.TokenProviderImpl
@@ -31,7 +31,7 @@ import timber.log.Timber
 val networkModule = module {
     val baseUrl = "http://188.34.155.223/new-qr-menu/"
     single {
-        val tokenManager: TokenManager = get()
+        val sessionProvider: SessionProvider = get()
         HttpClient(Android) {
             install(Logging) {
                 logger = object : Logger {
@@ -59,7 +59,7 @@ val networkModule = module {
             install(Auth) {
                 bearer {
                     loadTokens {
-                        val token = tokenManager.authToken.first()
+                        val token = sessionProvider.authToken.first()
                         if (token != null) {
                             BearerTokens(token, "")
                         } else {

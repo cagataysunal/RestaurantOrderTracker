@@ -1,6 +1,6 @@
 package com.cagataysunal.restaurantordertracker.di
 
-import com.cagataysunal.restaurantordertracker.data.local.TokenManager
+import com.cagataysunal.restaurantordertracker.data.local.SessionProvider
 import com.cagataysunal.restaurantordertracker.data.repository.RestaurantRepositoryImpl
 import com.cagataysunal.restaurantordertracker.data.repository.UserRepositoryImpl
 import com.cagataysunal.restaurantordertracker.domain.repository.RestaurantRepository
@@ -12,7 +12,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val appModule = module {
-    single { TokenManager(androidContext()) }
+    single { SessionProvider(androidContext()) }
     single<UserRepository> { UserRepositoryImpl(get(), get()) }
     single<RestaurantRepository> { RestaurantRepositoryImpl(get()) }
     factory { RegisterUserUseCase(get()) }
