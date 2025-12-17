@@ -3,6 +3,9 @@ package com.cagataysunal.restaurantordertracker.di
 import com.cagataysunal.restaurantordertracker.data.local.TokenManager
 import com.cagataysunal.restaurantordertracker.data.remote.ApiService
 import com.cagataysunal.restaurantordertracker.data.remote.ApiServiceImpl
+import com.cagataysunal.restaurantordertracker.data.repository.TokenProviderImpl
+import com.cagataysunal.restaurantordertracker.data.websocket.PusherManager
+import com.cagataysunal.restaurantordertracker.domain.repository.TokenProvider
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.auth.Auth
@@ -20,6 +23,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import org.koin.dsl.module
+import timber.log.Timber
 
 @OptIn(ExperimentalSerializationApi::class)
 val networkModule = module {
@@ -28,7 +32,11 @@ val networkModule = module {
         val tokenManager: TokenManager = get()
         HttpClient(Android) {
             install(Logging) {
-                logger = Logger.ANDROID
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Timber.tag("Ktor").v(message)
+                    }
+                }
                 level = LogLevel.ALL
             }
             defaultRequest {
@@ -57,8 +65,8 @@ val networkModule = module {
                         }
                     }
                     sendWithoutRequest { request ->
-                        request.url.encodedPath.contains("/api/v1/customer/register")
-                        request.url.encodedPath.contains("/api/v1/customer/login")
+                        request.url.encodedPath.contains("/api/v1/customer/register") ||
+                                request.url.encodedPath.contains("/api/v1/customer/login")
                     }
                 }
             }
@@ -66,4 +74,6 @@ val networkModule = module {
     }
 
     single<ApiService> { ApiServiceImpl(get()) }
+    single<TokenProvider> { TokenProviderImpl(get()) }
+    single { PusherManager(get(), get()) }
 }
