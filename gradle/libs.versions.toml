@@ -14,7 +14,8 @@ activityCompose = "1.12.1"
 composeBom = "2025.12.00"
 materialIcons = "1.7.8"
 navigationCompose = "2.9.6"
-socketIoClient = "2.1.2"
+pusher = "2.4.4"
+timber = "5.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,7 +44,8 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorVer
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorVersion" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorVersion" }
-socket-io-client = { module = "io.socket:socket.io-client", version.ref = "socketIoClient" }
+pusher-java-client = { module = "com.pusher:pusher-java-client", version.ref = "pusher" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

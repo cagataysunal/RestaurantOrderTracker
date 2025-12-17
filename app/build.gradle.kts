@@ -72,8 +72,11 @@ dependencies {
     // DataStore for Local Storage
     implementation(libs.androidx.datastore.preferences)
 
-    // Socket.IO
-    implementation(libs.socket.io.client)
+    // WebSocket
+    implementation(libs.pusher.java.client)
+
+    // Timber for logging
+    implementation(libs.timber)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
