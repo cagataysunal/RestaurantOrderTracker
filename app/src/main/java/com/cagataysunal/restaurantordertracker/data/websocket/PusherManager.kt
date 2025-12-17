@@ -1,5 +1,6 @@
 package com.cagataysunal.restaurantordertracker.data.websocket
 
+import com.cagataysunal.restaurantordertracker.BuildConfig
 import com.cagataysunal.restaurantordertracker.domain.repository.TokenProvider
 import com.pusher.client.ChannelAuthorizer
 import com.pusher.client.Pusher
@@ -48,7 +49,6 @@ class CustomAuthorizer(
 
 private const val HOST = "188.34.155.223"
 private const val WS_PORT = 6001
-private const val API_KEY = "vun3o0gckcobpaxwpi3u"
 
 class PusherManager(
     private val tokenProvider: TokenProvider,
@@ -66,7 +66,7 @@ class PusherManager(
             channelAuthorizer = authorizer
         }
 
-        pusher = Pusher(API_KEY, options)
+        pusher = Pusher(BuildConfig.PUSHER_API_KEY, options)
 
         pusher.connect(object : ConnectionEventListener {
             override fun onConnectionStateChange(change: ConnectionStateChange) {
