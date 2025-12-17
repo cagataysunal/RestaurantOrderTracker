@@ -12,15 +12,17 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import timber.log.Timber
 
+private const val TAG = "ApiServiceImpl"
+
 class ApiServiceImpl(private val client: HttpClient) : ApiService {
     override suspend fun registerUser(request: UserRegistrationRequest): RegisterResponse {
         return try {
-            client.post("api/v1/customer/register") {
+            client.post(ApiEndpoints.REGISTER) {
                 contentType(ContentType.Application.Json)
                 setBody(request)
             }.body<RegisterResponse>()
         } catch (e: Exception) {
-            Timber.tag("ApiServiceImpl").e(e, "Registration failed: ${e.message}")
+            Timber.tag(TAG).e(e, "Registration failed: ${e.message}")
             RegisterResponse(
                 success = false,
                 message = e.localizedMessage ?: "An unknown error occurred",
@@ -32,12 +34,12 @@ class ApiServiceImpl(private val client: HttpClient) : ApiService {
 
     override suspend fun login(request: LoginRequest): LoginResponse {
         return try {
-            client.post("api/v1/customer/login") {
+            client.post(ApiEndpoints.LOGIN) {
                 contentType(ContentType.Application.Json)
                 setBody(request)
             }.body<LoginResponse>()
         } catch (e: Exception) {
-            Timber.tag("ApiServiceImpl").e(e, "Login failed: ${e.message}")
+            Timber.tag(TAG).e(e, "Login failed: ${e.message}")
             LoginResponse(
                 success = false,
                 message = e.localizedMessage ?: "An unknown error occurred",
