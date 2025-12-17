@@ -90,7 +90,6 @@ fun RegistrationContent(
             isError = usernameError != null,
             supportingText = { usernameError?.let { Text(it) } }
         )
-        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = email,
             onValueChange = { email = it; emailError = null },
@@ -98,7 +97,6 @@ fun RegistrationContent(
             isError = emailError != null,
             supportingText = { emailError?.let { Text(it) } }
         )
-        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = password,
             onValueChange = { password = it; passwordError = null },
@@ -116,7 +114,6 @@ fun RegistrationContent(
                 }
             }
         )
-        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = passwordConfirmation,
             onValueChange = { passwordConfirmation = it; passwordConfirmationError = null },
@@ -137,7 +134,6 @@ fun RegistrationContent(
                 }
             }
         )
-        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = phone,
             onValueChange = { phone = it; phoneError = null },
@@ -145,7 +141,6 @@ fun RegistrationContent(
             isError = phoneError != null,
             supportingText = { phoneError?.let { Text(it) } }
         )
-        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = businessName,
             onValueChange = { businessName = it; businessNameError = null },
@@ -153,7 +148,6 @@ fun RegistrationContent(
             isError = businessNameError != null,
             supportingText = { businessNameError?.let { Text(it) } }
         )
-        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = businessPhone,
             onValueChange = { businessPhone = it; businessPhoneError = null },
@@ -161,7 +155,6 @@ fun RegistrationContent(
             isError = businessPhoneError != null,
             supportingText = { businessPhoneError?.let { Text(it) } }
         )
-        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = businessEmail,
             onValueChange = { businessEmail = it; businessEmailError = null },
@@ -169,7 +162,7 @@ fun RegistrationContent(
             isError = businessEmailError != null,
             supportingText = { businessEmailError?.let { Text(it) } }
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = {
                 if (validate()) {
