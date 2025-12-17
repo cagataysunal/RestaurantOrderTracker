@@ -1,7 +1,7 @@
 package com.cagataysunal.restaurantordertracker.data.repository
 
 import com.cagataysunal.restaurantordertracker.data.dto.LoginRequest
-import com.cagataysunal.restaurantordertracker.data.dto.RegisterResponse
+import com.cagataysunal.restaurantordertracker.data.dto.RegisterUserResponse
 import com.cagataysunal.restaurantordertracker.data.dto.User
 import com.cagataysunal.restaurantordertracker.data.dto.UserRegistrationRequest
 import com.cagataysunal.restaurantordertracker.data.local.SessionProvider
@@ -14,7 +14,7 @@ class UserRepositoryImpl(
     private val apiService: ApiService,
     private val sessionProvider: SessionProvider
 ) : UserRepository {
-    override suspend fun registerUser(request: UserRegistrationRequest): RegisterResponse {
+    override suspend fun registerUser(request: UserRegistrationRequest): RegisterUserResponse {
         val response = apiService.registerUser(request)
         if (response.success && response.token != null && response.user != null) {
             sessionProvider.saveAuthToken(response.token)
@@ -29,7 +29,7 @@ class UserRepositoryImpl(
             if (response.success && response.token != null && response.user != null) {
                 sessionProvider.saveAuthToken(response.token)
                 sessionProvider.saveUser(response.user)
-                LoginResult.Success(response.token)
+                LoginResult.Success(response.token, response.user)
             } else {
                 LoginResult.Fail(response.error?.getOrNull(0) ?: response.message)
             }

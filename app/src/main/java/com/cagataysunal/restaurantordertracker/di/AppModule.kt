@@ -6,6 +6,7 @@ import com.cagataysunal.restaurantordertracker.data.repository.UserRepositoryImp
 import com.cagataysunal.restaurantordertracker.domain.repository.RestaurantRepository
 import com.cagataysunal.restaurantordertracker.domain.repository.UserRepository
 import com.cagataysunal.restaurantordertracker.domain.usecase.LoginUserUseCase
+import com.cagataysunal.restaurantordertracker.domain.usecase.RegisterRestaurantUseCase
 import com.cagataysunal.restaurantordertracker.domain.usecase.RegisterUserUseCase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -16,4 +17,5 @@ val appModule = module {
     single<RestaurantRepository> { RestaurantRepositoryImpl(get()) }
     factory { RegisterUserUseCase(get()) }
     factory { LoginUserUseCase(get()) }
+    factory { RegisterRestaurantUseCase(get()) }
 }

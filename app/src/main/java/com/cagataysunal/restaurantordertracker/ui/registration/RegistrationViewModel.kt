@@ -17,8 +17,8 @@ class RegistrationViewModel(private val registerUserUseCase: RegisterUserUseCase
         viewModelScope.launch {
             _registrationState.value = RegistrationState.Loading
             val response = registerUserUseCase(request)
-            _registrationState.value = if (response.success) {
-                RegistrationState.Success
+            _registrationState.value = if (response.success && response.user != null) {
+                RegistrationState.Success(response.user.restaurantId)
             } else {
                 RegistrationState.Error(response.error?.getOrNull(0) ?: response.message)
             }
@@ -29,6 +29,6 @@ class RegistrationViewModel(private val registerUserUseCase: RegisterUserUseCase
 sealed class RegistrationState {
     object Idle : RegistrationState()
     object Loading : RegistrationState()
-    object Success : RegistrationState()
+    data class Success(val restaurantId: Int) : RegistrationState()
     data class Error(val message: String) : RegistrationState()
 }
