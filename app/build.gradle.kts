@@ -72,6 +72,9 @@ dependencies {
     // DataStore for Local Storage
     implementation(libs.androidx.datastore.preferences)
 
+    // Socket.IO
+    implementation(libs.socket.io.client)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
