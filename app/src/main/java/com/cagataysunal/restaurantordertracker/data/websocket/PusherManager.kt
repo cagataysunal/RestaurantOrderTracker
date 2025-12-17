@@ -46,6 +46,10 @@ class CustomAuthorizer(
     }
 }
 
+private const val HOST = "188.34.155.223"
+private const val WS_PORT = 6001
+private const val API_KEY = "vun3o0gckcobpaxwpi3u"
+
 class PusherManager(
     private val tokenProvider: TokenProvider,
     private val httpClient: HttpClient
@@ -56,13 +60,13 @@ class PusherManager(
         val authorizer = CustomAuthorizer(httpClient, tokenProvider)
 
         val options = PusherOptions().apply {
-            setHost("188.34.155.223")
-            setWsPort(6001)
+            setHost(HOST)
+            setWsPort(WS_PORT)
             setUseTLS(false)
             channelAuthorizer = authorizer
         }
 
-        pusher = Pusher("vun3o0gckcobpaxwpi3u", options)
+        pusher = Pusher(API_KEY, options)
 
         pusher.connect(object : ConnectionEventListener {
             override fun onConnectionStateChange(change: ConnectionStateChange) {
@@ -84,10 +88,6 @@ class PusherManager(
             channel.bind("order.created") { event ->
                 Timber.d("Order created event received: ${event.data}")
                 // TODO: Handle the event, e.g., parse the data and notify the app
-            }
-            channel.bind("order.updated") { event ->
-                Timber.d("Order updated event received: ${event.data}")
-                // TODO: Handle the event
             }
         }
     }
