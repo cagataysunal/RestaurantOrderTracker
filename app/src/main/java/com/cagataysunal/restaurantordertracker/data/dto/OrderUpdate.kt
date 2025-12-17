@@ -3,7 +3,7 @@ package com.cagataysunal.restaurantordertracker.data.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class OrderCreatedEvent(
+data class OrderUpdate(
     val orderId: String,
     val customerName: String,
     val customerPhone: String,
