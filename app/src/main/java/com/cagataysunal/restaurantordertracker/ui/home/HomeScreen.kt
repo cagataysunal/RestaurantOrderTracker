@@ -60,6 +60,6 @@ fun HomeScreenContent(onOrderClick: (OrderUpdate) -> Unit) {
 @Composable
 fun HomeScreenPreview() {
     RestaurantOrderTrackerTheme {
-        // HomeScreenContent() // Can't preview directly without providing a mock callback
+        HomeScreenContent(onOrderClick = {})
     }
 }
