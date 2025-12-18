@@ -16,6 +16,7 @@ materialIcons = "1.7.8"
 navigationCompose = "2.9.6"
 pusher = "2.4.4"
 timber = "5.0.1"
+mapbox = "11.17.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +47,8 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorVersion" }
 pusher-java-client = { module = "com.pusher:pusher-java-client", version.ref = "pusher" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+mapbox = { module = "com.mapbox.maps:android-ndk27", version.ref = "mapbox" }
+mapbox-compose = { module = "com.mapbox.extension:maps-compose-ndk27", version.ref = "mapbox" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
