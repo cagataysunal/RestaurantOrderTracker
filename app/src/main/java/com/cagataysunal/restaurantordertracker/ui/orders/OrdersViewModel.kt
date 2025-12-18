@@ -22,6 +22,9 @@ class OrdersViewModel(
     private val _orders = MutableStateFlow<List<OrderUpdate>>(emptyList())
     val orders = _orders.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+
     init {
         listenForOrderUpdates()
     }
@@ -29,6 +32,14 @@ class OrdersViewModel(
     fun getOrders() {
         viewModelScope.launch {
             _orders.value = getOrdersUseCase()
+        }
+    }
+
+    fun refreshOrders() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            _orders.value = getOrdersUseCase()
+            _isRefreshing.value = false
         }
     }
 
