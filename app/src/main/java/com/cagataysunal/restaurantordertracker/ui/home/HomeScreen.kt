@@ -1,5 +1,11 @@
 package com.cagataysunal.restaurantordertracker.ui.home
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -48,9 +54,23 @@ fun HomeScreenContent(onOrderClick: (OrderUpdate) -> Unit) {
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            when (selectedItem) {
-                0 -> OrdersScreen(onOrderClick = onOrderClick)
-                1 -> MyPageScreen()
+            AnimatedContent(
+                targetState = selectedItem,
+                transitionSpec = {
+                    if (targetState > initialState) {
+                        slideInHorizontally { width -> width } + fadeIn() togetherWith
+                                slideOutHorizontally { width -> -width } + fadeOut()
+                    } else {
+                        slideInHorizontally { width -> -width } + fadeIn() togetherWith
+                                slideOutHorizontally { width -> width } + fadeOut()
+                    }
+                },
+                label = "bottom-nav-animation"
+            ) { targetState ->
+                when (targetState) {
+                    0 -> OrdersScreen(onOrderClick = onOrderClick)
+                    1 -> MyPageScreen()
+                }
             }
         }
     }
