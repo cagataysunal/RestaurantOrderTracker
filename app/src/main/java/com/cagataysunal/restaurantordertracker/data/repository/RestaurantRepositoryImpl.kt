@@ -1,6 +1,7 @@
 package com.cagataysunal.restaurantordertracker.data.repository
 
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterRestaurantRequest
+import com.cagataysunal.restaurantordertracker.data.dto.RegisterRestaurantResponse
 import com.cagataysunal.restaurantordertracker.data.mapper.toDomain
 import com.cagataysunal.restaurantordertracker.data.remote.ApiService
 import com.cagataysunal.restaurantordertracker.domain.model.Restaurant
@@ -12,7 +13,7 @@ class RestaurantRepositoryImpl(private val apiService: ApiService) : RestaurantR
         return response?.data?.firstOrNull()?.toDomain()
     }
 
-    override suspend fun registerRestaurant(request: RegisterRestaurantRequest): Boolean {
+    override suspend fun registerRestaurant(request: RegisterRestaurantRequest): RegisterRestaurantResponse {
         return apiService.registerRestaurant(request)
     }
 }

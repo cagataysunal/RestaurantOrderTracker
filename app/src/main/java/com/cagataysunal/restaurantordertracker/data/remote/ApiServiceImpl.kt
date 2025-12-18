@@ -5,6 +5,7 @@ import com.cagataysunal.restaurantordertracker.data.dto.LoginRequest
 import com.cagataysunal.restaurantordertracker.data.dto.LoginResponse
 import com.cagataysunal.restaurantordertracker.data.dto.OrderData
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterRestaurantRequest
+import com.cagataysunal.restaurantordertracker.data.dto.RegisterRestaurantResponse
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterUserResponse
 import com.cagataysunal.restaurantordertracker.data.dto.RestaurantListResponse
 import com.cagataysunal.restaurantordertracker.data.dto.UpdateOrderStatusRequest
@@ -14,7 +15,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -68,19 +68,18 @@ class ApiServiceImpl(private val client: HttpClient) : ApiService {
     }
 
 
-    override suspend fun registerRestaurant(request: RegisterRestaurantRequest): Boolean {
+    override suspend fun registerRestaurant(request: RegisterRestaurantRequest): RegisterRestaurantResponse {
         return try {
-            val response: HttpResponse = client.post(ApiEndpoints.RESTAURANT) {
+            client.post(ApiEndpoints.RESTAURANT) {
                 contentType(ContentType.Application.Json)
                 setBody(request)
-            }
-            if (!response.status.isSuccess()) {
-                Timber.tag(TAG).w("Restaurant registration failed with status ${response.status}: ${response.bodyAsText()}")
-            }
-            response.status.isSuccess()
+            }.body<RegisterRestaurantResponse>()
         } catch (e: Exception) {
             Timber.tag(TAG).e(e, "Restaurant registration failed: ${e.message}")
-            false
+            RegisterRestaurantResponse(
+                success = false,
+                message = e.localizedMessage ?: "An unknown error occurred"
+            )
         }
     }
 
@@ -101,7 +100,7 @@ class ApiServiceImpl(private val client: HttpClient) : ApiService {
 
     override suspend fun updateOrderStatus(request: UpdateOrderStatusRequest): Boolean {
         return try {
-            val response: HttpResponse = client.post(ApiEndpoints.UPDATE_ORDER_STATUS) {
+            val response = client.post(ApiEndpoints.UPDATE_ORDER_STATUS) {
                 contentType(ContentType.Application.Json)
                 setBody(request)
             }

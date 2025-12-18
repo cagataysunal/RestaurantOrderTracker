@@ -24,7 +24,7 @@ val appModule = module {
 
     factory { RegisterUserUseCase(get()) }
     factory { LoginUserUseCase(get()) }
-    factory { RegisterRestaurantUseCase(get()) }
+    factory { RegisterRestaurantUseCase(get(), get()) }
     factory { GetRestaurantInfoUseCase(get()) }
     factory { GetOrdersUseCase(get()) }
     factory { UpdateOrderStatusUseCase(get()) }
