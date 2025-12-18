@@ -2,12 +2,15 @@ package com.cagataysunal.restaurantordertracker.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.cagataysunal.restaurantordertracker.data.dto.OrderUpdate
 import com.cagataysunal.restaurantordertracker.ui.home.HomeScreen
 import com.cagataysunal.restaurantordertracker.ui.login.LoginScreen
+import com.cagataysunal.restaurantordertracker.ui.map.MapScreen
 import com.cagataysunal.restaurantordertracker.ui.orderdetail.OrderDetailScreen
 import com.cagataysunal.restaurantordertracker.ui.registration.RegistrationScreen
 import com.cagataysunal.restaurantordertracker.ui.restaurantregistration.RestaurantContactScreen
@@ -31,6 +34,10 @@ sealed class Screen(val route: String) {
     object RestaurantHours : Screen("restaurant_hours")
     object OrderDetail : Screen("order_detail/{order}") {
         fun createRoute(order: String) = "order_detail/$order"
+    }
+
+    object Map : Screen("map/{lat}/{lon}") {
+        fun createRoute(lat: Double, lon: Double) = "map/$lat/$lon"
     }
 }
 
@@ -96,6 +103,16 @@ fun AppNavigation() {
             if (order != null) {
                 OrderDetailScreen(navController, order)
             }
+        }
+        composable(
+            Screen.Map.route,
+            arguments = listOf(
+                navArgument("lat") { type = NavType.FloatType },
+                navArgument("lon") { type = NavType.FloatType })
+        ) { backStackEntry ->
+            val lat = backStackEntry.arguments?.getFloat("lat")?.toDouble() ?: 0.0
+            val lon = backStackEntry.arguments?.getFloat("lon")?.toDouble() ?: 0.0
+            MapScreen(lat = lat, lon = lon)
         }
     }
 }

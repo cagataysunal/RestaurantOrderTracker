@@ -23,6 +23,7 @@ import com.cagataysunal.restaurantordertracker.data.dto.DeliveryAddress
 import com.cagataysunal.restaurantordertracker.data.dto.OrderDetails
 import com.cagataysunal.restaurantordertracker.data.dto.OrderItem
 import com.cagataysunal.restaurantordertracker.data.dto.OrderUpdate
+import com.cagataysunal.restaurantordertracker.ui.navigation.Screen
 import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -63,21 +64,47 @@ fun OrderDetailScreen(
             modifier = Modifier.align(Alignment.End)
         )
         Spacer(modifier = Modifier.height(32.dp))
-        Row(
+        Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Button(onClick = {
-                viewModel?.acceptOrder(order.uniqueCode)
-                navController.popBackStack()
-            }) {
-                Text(text = "Accept")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(
+                    onClick = {
+                        viewModel?.acceptOrder(order.uniqueCode)
+                        navController.popBackStack()
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "Accept")
+                }
+                Spacer(modifier = Modifier.weight(0.1f))
+                Button(
+                    onClick = {
+                        viewModel?.rejectOrder(order.uniqueCode)
+                        navController.popBackStack()
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "Reject")
+                }
             }
-            Button(onClick = {
-                viewModel?.rejectOrder(order.uniqueCode)
-                navController.popBackStack()
-            }) {
-                Text(text = "Reject")
+            Button(
+                onClick = {
+                    navController.navigate(
+                        Screen.Map.createRoute(
+                            lat = 40.86410170504059,
+                            lon = 35.61226281039344
+                        )
+                    )
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Show on Map")
             }
         }
     }
