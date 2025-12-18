@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OrderUpdate(
     val orderId: String,
+    val uniqueCode: String,
     val customerName: String,
     val customerPhone: String,
     val customerEmail: String,

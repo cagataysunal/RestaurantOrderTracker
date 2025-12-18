@@ -5,4 +5,5 @@ object ApiEndpoints {
     const val LOGIN = "api/v1/customer/login"
     const val RESTAURANT = "api/v1/customer/restaurant"
     const val GET_ORDERS = "api/v1/order/get_order_list"
+    const val UPDATE_ORDER_STATUS = "api/v1/order/accept_or_cancel_order"
 }

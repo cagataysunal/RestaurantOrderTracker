@@ -12,6 +12,7 @@ import com.cagataysunal.restaurantordertracker.domain.usecase.GetRestaurantInfoU
 import com.cagataysunal.restaurantordertracker.domain.usecase.LoginUserUseCase
 import com.cagataysunal.restaurantordertracker.domain.usecase.RegisterRestaurantUseCase
 import com.cagataysunal.restaurantordertracker.domain.usecase.RegisterUserUseCase
+import com.cagataysunal.restaurantordertracker.domain.usecase.UpdateOrderStatusUseCase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -26,4 +27,5 @@ val appModule = module {
     factory { RegisterRestaurantUseCase(get()) }
     factory { GetRestaurantInfoUseCase(get()) }
     factory { GetOrdersUseCase(get()) }
+    factory { UpdateOrderStatusUseCase(get()) }
 }

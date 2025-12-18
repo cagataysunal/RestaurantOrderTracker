@@ -11,5 +11,5 @@ data class OrderDetails(
     val paymentMethod: String,
     val paymentStatus: String,
     val status: String,
-    val notes: String?
+    val note: String?
 )

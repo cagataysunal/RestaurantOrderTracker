@@ -18,17 +18,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.cagataysunal.restaurantordertracker.ui.mypage.MyPageScreen
 import com.cagataysunal.restaurantordertracker.ui.orders.OrdersScreen
 import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
 
 @Composable
-fun HomeScreen() {
-    HomeScreenContent()
+fun HomeScreen(navController: NavController) {
+    HomeScreenContent(navController)
 }
 
 @Composable
-fun HomeScreenContent() {
+fun HomeScreenContent(navController: NavController) {
     var selectedItem by remember { mutableIntStateOf(0) }
     val items = listOf("Orders", "My Page", "Options")
     val icons = listOf(Icons.AutoMirrored.Filled.List, Icons.Filled.Person, Icons.Filled.Settings)
@@ -49,7 +50,7 @@ fun HomeScreenContent() {
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedItem) {
-                0 -> OrdersScreen()
+                0 -> OrdersScreen(navController)
                 1 -> MyPageScreen()
                 2 -> Text("Options Screen") // Replace with your Options screen
             }
@@ -61,6 +62,6 @@ fun HomeScreenContent() {
 @Composable
 fun HomeScreenPreview() {
     RestaurantOrderTrackerTheme {
-        HomeScreenContent()
+        // HomeScreenContent() // Requires a NavController, so we can't preview it directly
     }
 }

@@ -5,6 +5,7 @@ import com.cagataysunal.restaurantordertracker.data.dto.LoginResponse
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterRestaurantRequest
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterUserResponse
 import com.cagataysunal.restaurantordertracker.data.dto.RestaurantListResponse
+import com.cagataysunal.restaurantordertracker.data.dto.UpdateOrderStatusRequest
 import com.cagataysunal.restaurantordertracker.data.dto.UserRegistrationRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -92,6 +93,23 @@ class ApiServiceImpl(private val client: HttpClient) : ApiService {
             response.status.isSuccess()
         } catch (e: Exception) {
             Timber.e(e, "order list request failed: ${e.message}")
+            false
+        }
+    }
+
+    override suspend fun updateOrderStatus(request: UpdateOrderStatusRequest): Boolean {
+        return try {
+            val response: HttpResponse = client.post(ApiEndpoints.UPDATE_ORDER_STATUS) {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            if (!response.status.isSuccess()) {
+                Timber.tag(TAG)
+                    .w("Update order status failed with status ${response.status}: ${response.bodyAsText()}")
+            }
+            response.status.isSuccess()
+        } catch (e: Exception) {
+            Timber.tag(TAG).e(e, "Update order status failed: ${e.message}")
             false
         }
     }

@@ -1,6 +1,7 @@
 package com.cagataysunal.restaurantordertracker.data.websocket
 
 import com.cagataysunal.restaurantordertracker.BuildConfig
+import com.cagataysunal.restaurantordertracker.data.dto.OrderUpdate
 import com.pusher.client.ChannelAuthorizer
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
@@ -17,8 +18,15 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 import timber.log.Timber
 
 class CustomAuthorizer(private val client: HttpClient) : ChannelAuthorizer {
@@ -31,8 +39,7 @@ class CustomAuthorizer(private val client: HttpClient) : ChannelAuthorizer {
                         header("X-Requested-With", "XMLHttpRequest")
                         setBody(mapOf("socket_id" to socketId, "channel_name" to channelName))
                     }
-                val responseBody = response.bodyAsText()
-                JSONObject(responseBody).optString("auth")
+                response.bodyAsText()
             }
         } catch (e: Exception) {
             Timber.e(e, "Pusher authentication failed")
@@ -46,6 +53,17 @@ private const val WS_PORT = 6001
 
 class PusherManager(private val httpClient: HttpClient) {
     private lateinit var pusher: Pusher
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+
+    private val _orderUpdates = MutableSharedFlow<OrderUpdate>()
+    val orderUpdates = _orderUpdates.asSharedFlow()
+
+    @OptIn(ExperimentalSerializationApi::class)
+    private val json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+        namingStrategy = JsonNamingStrategy.SnakeCase
+    }
 
     fun init(restaurantId: String) {
         val authorizer = CustomAuthorizer(httpClient)
@@ -80,7 +98,14 @@ class PusherManager(private val httpClient: HttpClient) {
             override fun onEvent(event: PusherEvent) {
                 if (event.eventName == "order.created") {
                     Timber.d("Order created event received: ${event.data}")
-                    // TODO: Handle the event, e.g., parse the data and notify the app
+                    try {
+                        val orderUpdate = json.decodeFromString<OrderUpdate>(event.data)
+                        coroutineScope.launch {
+                            _orderUpdates.emit(orderUpdate)
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error parsing order update")
+                    }
                 }
             }
 
@@ -97,6 +122,8 @@ class PusherManager(private val httpClient: HttpClient) {
     }
 
     fun disconnect() {
-        pusher.disconnect()
+        if (::pusher.isInitialized) {
+            pusher.disconnect()
+        }
     }
 }

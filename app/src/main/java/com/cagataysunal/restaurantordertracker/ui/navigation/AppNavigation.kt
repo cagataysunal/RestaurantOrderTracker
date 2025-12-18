@@ -5,8 +5,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.cagataysunal.restaurantordertracker.data.dto.OrderUpdate
 import com.cagataysunal.restaurantordertracker.ui.home.HomeScreen
 import com.cagataysunal.restaurantordertracker.ui.login.LoginScreen
+import com.cagataysunal.restaurantordertracker.ui.orderdetail.OrderDetailScreen
 import com.cagataysunal.restaurantordertracker.ui.registration.RegistrationScreen
 import com.cagataysunal.restaurantordertracker.ui.restaurantregistration.RestaurantContactScreen
 import com.cagataysunal.restaurantordertracker.ui.restaurantregistration.RestaurantHoursScreen
@@ -15,6 +17,7 @@ import com.cagataysunal.restaurantordertracker.ui.restaurantregistration.Restaur
 import com.cagataysunal.restaurantordertracker.ui.restaurantregistration.RestaurantRegistrationViewModel
 import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
 import com.cagataysunal.restaurantordertracker.ui.welcome.WelcomeScreen
+import kotlinx.serialization.json.Json
 import org.koin.androidx.compose.koinViewModel
 
 sealed class Screen(val route: String) {
@@ -26,6 +29,9 @@ sealed class Screen(val route: String) {
     object RestaurantName : Screen("restaurant_name")
     object RestaurantContact : Screen("restaurant_contact")
     object RestaurantHours : Screen("restaurant_hours")
+    object OrderDetail : Screen("order_detail/{order}") {
+        fun createRoute(order: String) = "order_detail/$order"
+    }
 }
 
 @Composable
@@ -70,7 +76,7 @@ fun AppNavigation() {
             )
         }
         composable(Screen.Home.route) {
-            HomeScreen()
+            HomeScreen(navController)
         }
         composable(Screen.RestaurantPrompt.route) {
             RestaurantPromptScreen(navController)
@@ -83,6 +89,13 @@ fun AppNavigation() {
         }
         composable(Screen.RestaurantHours.route) {
             RestaurantHoursScreen(navController, restaurantViewModel)
+        }
+        composable(Screen.OrderDetail.route) { backStackEntry ->
+            val orderJson = backStackEntry.arguments?.getString("order")
+            val order = orderJson?.let { Json.decodeFromString<OrderUpdate>(it) }
+            if (order != null) {
+                OrderDetailScreen(navController, order)
+            }
         }
     }
 }
