@@ -15,9 +15,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.cagataysunal.restaurantordertracker.data.dto.DeliveryAddress
+import com.cagataysunal.restaurantordertracker.data.dto.OrderDetails
+import com.cagataysunal.restaurantordertracker.data.dto.OrderItem
 import com.cagataysunal.restaurantordertracker.data.dto.OrderUpdate
+import com.cagataysunal.restaurantordertracker.domain.usecase.UpdateOrderStatusUseCase
+import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -73,5 +80,110 @@ fun OrderDetailScreen(
                 Text(text = "Reject")
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun OrderDetailScreenPreview() {
+    val mockOrder = OrderUpdate(
+        orderId = "12345",
+        uniqueCode = "ORD-123",
+        customerName = "John Doe",
+        customerPhone = "555-1234",
+        customerEmail = "john.doe@example.com",
+        deliveryAddress = DeliveryAddress(
+            fullAddress = "123 Main St, Apt 4B",
+            city = "Metropolis",
+            district = "Downtown",
+            neighborhood = "Central"
+        ),
+        orderDetails = OrderDetails(
+            totalAmount = 250.0,
+            discountAmount = 25.0,
+            deliveryFee = 10.0,
+            finalAmount = 235.0,
+            paymentMethod = "Credit Card",
+            paymentStatus = "Paid",
+            status = "Pending",
+            note = "No onions, please."
+        ),
+        items = listOf(
+            OrderItem("Pizza", 1, 150.0, 150.0),
+            OrderItem("Coke", 2, 25.0, 50.0),
+            OrderItem("Fries", 1, 50.0, 50.0)
+        ),
+        createdAt = "2024-01-01T12:00:00Z"
+    )
+
+    // This is a mock. In a real app, you'd get this from Koin.
+    val mockViewModel = OrderDetailViewModel(
+        updateOrderStatusUseCase = object : UpdateOrderStatusUseCase(mock()) {
+            override suspend fun invoke(orderId: String, status: String): Boolean {
+                // Do nothing
+                return true
+            }
+        }
+    )
+
+    RestaurantOrderTrackerTheme {
+        OrderDetailScreen(
+            navController = rememberNavController(),
+            order = mockOrder,
+            viewModel = mockViewModel
+        )
+    }
+}
+
+// Helper function for mocking, since we can't use a mocking library here.
+private fun <T> mock(): T {
+    return null as T
+}
+
+@Preview(showBackground = true, name = "Long Item List Preview")
+@Composable
+fun OrderDetailScreenLongListPreview() {
+    val mockOrder = OrderUpdate(
+        orderId = "12345",
+        uniqueCode = "ORD-124",
+        customerName = "Jane Smith",
+        customerPhone = "555-5678",
+        customerEmail = "jane.smith@example.com",
+        deliveryAddress = DeliveryAddress(
+            fullAddress = "456 Oak Ave, Suite 200",
+            city = "Gotham",
+            district = "Uptown",
+            neighborhood = "Riverside"
+        ),
+        orderDetails = OrderDetails(
+            totalAmount = 850.0,
+            discountAmount = 100.0,
+            deliveryFee = 15.0,
+            finalAmount = 765.0,
+            paymentMethod = "Cash",
+            paymentStatus = "Pending",
+            status = "Pending",
+            note = "Extra spicy on everything!"
+        ),
+        items = List(15) { index ->
+            OrderItem("Item ${index + 1}", index + 1, 50.0, 50.0 * (index + 1))
+        },
+        createdAt = "2024-01-01T13:00:00Z"
+    )
+
+    val mockViewModel = OrderDetailViewModel(
+        updateOrderStatusUseCase = object : UpdateOrderStatusUseCase(mock()) {
+            override suspend fun invoke(orderId: String, status: String): Boolean {
+                return true
+            }
+        }
+    )
+
+    RestaurantOrderTrackerTheme {
+        OrderDetailScreen(
+            navController = rememberNavController(),
+            order = mockOrder,
+            viewModel = mockViewModel
+        )
     }
 }
