@@ -12,10 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 
 @Composable
-fun RestaurantPromptScreen(navController: NavController) {
+fun RestaurantPromptScreen(onCreateRestaurant: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -25,7 +24,7 @@ fun RestaurantPromptScreen(navController: NavController) {
     ) {
         Text("To continue, you need to create a restaurant.")
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate("restaurant_name") }) {
+        Button(onClick = onCreateRestaurant) {
             Text("Create a new restaurant")
         }
     }

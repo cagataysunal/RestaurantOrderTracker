@@ -19,10 +19,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 
 @Composable
-fun RestaurantContactScreen(navController: NavController, viewModel: RestaurantRegistrationViewModel) {
+fun RestaurantContactScreen(onNext: () -> Unit, viewModel: RestaurantRegistrationViewModel) {
     var email by remember { mutableStateOf(viewModel.email) }
     var phone by remember { mutableStateOf(viewModel.phone) }
     var address by remember { mutableStateOf(viewModel.physicalAddress) }
@@ -60,7 +59,7 @@ fun RestaurantContactScreen(navController: NavController, viewModel: RestaurantR
             viewModel.districtId = districtId
             viewModel.country = country
             viewModel.language = language
-            navController.navigate("restaurant_hours")
+            onNext()
         }) {
             Text("Next")
         }

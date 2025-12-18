@@ -23,13 +23,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.cagataysunal.restaurantordertracker.data.dto.OrderUpdate
-import com.cagataysunal.restaurantordertracker.ui.navigation.Screen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = koinViewModel()) {
+fun OrdersScreen(
+    onOrderClick: (OrderUpdate) -> Unit,
+    viewModel: OrdersViewModel = koinViewModel()
+) {
     val orders by viewModel.orders.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -60,7 +61,7 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = koin
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(orders) { order ->
-                OrderItem(order, navController)
+                OrderItem(order, onOrderClick)
             }
         }
     }
@@ -68,12 +69,12 @@ fun OrdersScreen(navController: NavController, viewModel: OrdersViewModel = koin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OrderItem(order: OrderUpdate, navController: NavController) {
+fun OrderItem(order: OrderUpdate, onOrderClick: (OrderUpdate) -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         onClick = {
-            navController.navigate(Screen.OrderDetail.createRoute(order.uniqueCode))
+            onOrderClick(order)
         }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

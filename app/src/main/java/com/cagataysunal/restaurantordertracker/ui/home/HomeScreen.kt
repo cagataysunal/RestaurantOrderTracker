@@ -17,18 +17,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
+import com.cagataysunal.restaurantordertracker.data.dto.OrderUpdate
 import com.cagataysunal.restaurantordertracker.ui.mypage.MyPageScreen
 import com.cagataysunal.restaurantordertracker.ui.orders.OrdersScreen
 import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
 
 @Composable
-fun HomeScreen(navController: NavController) {
-    HomeScreenContent(navController)
+fun HomeScreen(onOrderClick: (OrderUpdate) -> Unit) {
+    HomeScreenContent(onOrderClick)
 }
 
 @Composable
-fun HomeScreenContent(navController: NavController) {
+fun HomeScreenContent(onOrderClick: (OrderUpdate) -> Unit) {
     var selectedItem by remember { mutableIntStateOf(0) }
     val items = listOf("Orders", "My Page")
     val icons = listOf(Icons.AutoMirrored.Filled.List, Icons.Filled.Person)
@@ -49,7 +49,7 @@ fun HomeScreenContent(navController: NavController) {
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedItem) {
-                0 -> OrdersScreen(navController)
+                0 -> OrdersScreen(onOrderClick = onOrderClick)
                 1 -> MyPageScreen()
             }
         }
@@ -60,6 +60,6 @@ fun HomeScreenContent(navController: NavController) {
 @Composable
 fun HomeScreenPreview() {
     RestaurantOrderTrackerTheme {
-        // HomeScreenContent() // Requires a NavController, so we can't preview it directly
+        // HomeScreenContent() // Can't preview directly without providing a mock callback
     }
 }

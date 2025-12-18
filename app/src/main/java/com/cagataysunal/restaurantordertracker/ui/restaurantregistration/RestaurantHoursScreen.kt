@@ -20,12 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.cagataysunal.restaurantordertracker.ui.navigation.Screen
 
 @Composable
 fun RestaurantHoursScreen(
-    navController: NavController,
+    onRegistrationSuccess: () -> Unit,
     viewModel: RestaurantRegistrationViewModel
 ) {
     var operationStartTime by remember { mutableStateOf(viewModel.operationStartTime) }
@@ -34,9 +32,7 @@ fun RestaurantHoursScreen(
 
     LaunchedEffect(uiState) {
         if (uiState is RestaurantRegistrationUIState.Success) {
-            navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.Welcome.route) { inclusive = true }
-            }
+            onRegistrationSuccess()
         }
     }
 

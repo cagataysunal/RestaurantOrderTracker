@@ -83,25 +83,52 @@ fun AppNavigation() {
             )
         }
         composable(Screen.Home.route) {
-            HomeScreen(navController)
+            HomeScreen(onOrderClick = { order ->
+                val orderJson = Json.encodeToString(order)
+                navController.navigate(Screen.OrderDetail.createRoute(orderJson))
+            })
         }
         composable(Screen.RestaurantPrompt.route) {
-            RestaurantPromptScreen(navController)
+            RestaurantPromptScreen(onCreateRestaurant = { navController.navigate(Screen.RestaurantName.route) })
         }
         composable(Screen.RestaurantName.route) {
-            RestaurantNameScreen(navController, restaurantViewModel)
+            RestaurantNameScreen(
+                onNext = { navController.navigate(Screen.RestaurantContact.route) },
+                viewModel = restaurantViewModel
+            )
         }
         composable(Screen.RestaurantContact.route) {
-            RestaurantContactScreen(navController, restaurantViewModel)
+            RestaurantContactScreen(
+                onNext = { navController.navigate(Screen.RestaurantHours.route) },
+                viewModel = restaurantViewModel
+            )
         }
         composable(Screen.RestaurantHours.route) {
-            RestaurantHoursScreen(navController, restaurantViewModel)
+            RestaurantHoursScreen(
+                onRegistrationSuccess = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Welcome.route) { inclusive = true }
+                    }
+                },
+                viewModel = restaurantViewModel
+            )
         }
         composable(Screen.OrderDetail.route) { backStackEntry ->
             val orderJson = backStackEntry.arguments?.getString("order")
             val order = orderJson?.let { Json.decodeFromString<OrderUpdate>(it) }
             if (order != null) {
-                OrderDetailScreen(navController, order)
+                OrderDetailScreen(
+                    order = order,
+                    onBack = { navController.popBackStack() },
+                    onShowOnMap = { lat, lon ->
+                        navController.navigate(
+                            Screen.Map.createRoute(
+                                lat = lat,
+                                lon = lon
+                            )
+                        )
+                    }
+                )
             }
         }
         composable(

@@ -17,10 +17,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 
 @Composable
-fun RestaurantNameScreen(navController: NavController, viewModel: RestaurantRegistrationViewModel) {
+fun RestaurantNameScreen(onNext: () -> Unit, viewModel: RestaurantRegistrationViewModel) {
     var name by remember { mutableStateOf(viewModel.name) }
     var description by remember { mutableStateOf(viewModel.description) }
 
@@ -49,7 +48,7 @@ fun RestaurantNameScreen(navController: NavController, viewModel: RestaurantRegi
             onClick = {
                 viewModel.name = name
                 viewModel.description = description
-                navController.navigate("restaurant_contact")
+                onNext()
             }
         ) {
             Text("Next")

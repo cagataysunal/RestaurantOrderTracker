@@ -17,20 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.cagataysunal.restaurantordertracker.data.dto.DeliveryAddress
 import com.cagataysunal.restaurantordertracker.data.dto.OrderDetails
 import com.cagataysunal.restaurantordertracker.data.dto.OrderItem
 import com.cagataysunal.restaurantordertracker.data.dto.OrderUpdate
-import com.cagataysunal.restaurantordertracker.ui.navigation.Screen
 import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OrderDetailScreen(
-    navController: NavController,
     order: OrderUpdate,
+    onBack: () -> Unit,
+    onShowOnMap: (lat: Double, lon: Double) -> Unit,
     viewModel: OrderDetailViewModel? = koinViewModel()
 ) {
     Column(
@@ -76,7 +74,7 @@ fun OrderDetailScreen(
                 Button(
                     onClick = {
                         viewModel?.acceptOrder(order.uniqueCode)
-                        navController.popBackStack()
+                        onBack()
                     },
                     modifier = Modifier.weight(1f)
                 ) {
@@ -86,7 +84,7 @@ fun OrderDetailScreen(
                 Button(
                     onClick = {
                         viewModel?.rejectOrder(order.uniqueCode)
-                        navController.popBackStack()
+                        onBack()
                     },
                     modifier = Modifier.weight(1f)
                 ) {
@@ -95,11 +93,9 @@ fun OrderDetailScreen(
             }
             Button(
                 onClick = {
-                    navController.navigate(
-                        Screen.Map.createRoute(
-                            lat = 40.86410170504059,
-                            lon = 35.61226281039344
-                        )
+                    onShowOnMap(
+                        40.86410170504059,
+                        35.61226281039344
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -145,9 +141,10 @@ fun OrderDetailScreenPreview() {
 
     RestaurantOrderTrackerTheme {
         OrderDetailScreen(
-            navController = rememberNavController(),
             order = mockOrder,
-            viewModel = null
+            viewModel = null,
+            onBack = {},
+            onShowOnMap = { _, _ -> }
         )
     }
 }
@@ -185,9 +182,10 @@ fun OrderDetailScreenLongListPreview() {
 
     RestaurantOrderTrackerTheme {
         OrderDetailScreen(
-            navController = rememberNavController(),
             order = mockOrder,
-            viewModel = null
+            viewModel = null,
+            onBack = {},
+            onShowOnMap = { _, _ -> }
         )
     }
 }
