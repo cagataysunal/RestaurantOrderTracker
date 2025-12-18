@@ -92,6 +92,9 @@ dependencies {
     implementation(libs.mapbox.search.place.autocomplete)
     implementation(libs.mapbox.search.offline)
 
+    // Mapbox Navigation
+    implementation(libs.mapbox.navigation)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
