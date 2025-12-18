@@ -36,7 +36,8 @@ fun OrderDetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = "Order #${order.uniqueCode}",
@@ -62,7 +63,7 @@ fun OrderDetailScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.End)
         )
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(32.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly

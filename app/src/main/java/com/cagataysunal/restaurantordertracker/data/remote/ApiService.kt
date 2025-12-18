@@ -2,6 +2,7 @@ package com.cagataysunal.restaurantordertracker.data.remote
 
 import com.cagataysunal.restaurantordertracker.data.dto.LoginRequest
 import com.cagataysunal.restaurantordertracker.data.dto.LoginResponse
+import com.cagataysunal.restaurantordertracker.data.dto.OrderData
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterRestaurantRequest
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterUserResponse
 import com.cagataysunal.restaurantordertracker.data.dto.RestaurantListResponse
@@ -13,6 +14,6 @@ interface ApiService {
     suspend fun login(request: LoginRequest): LoginResponse
     suspend fun getRestaurants(): RestaurantListResponse?
     suspend fun registerRestaurant(request: RegisterRestaurantRequest): Boolean
-    suspend fun getOrders(): Boolean
+    suspend fun getOrders(): List<OrderData>
     suspend fun updateOrderStatus(request: UpdateOrderStatusRequest): Boolean
 }

@@ -1,7 +1,9 @@
 package com.cagataysunal.restaurantordertracker.data.remote
 
+import com.cagataysunal.restaurantordertracker.data.dto.GetOrdersResponse
 import com.cagataysunal.restaurantordertracker.data.dto.LoginRequest
 import com.cagataysunal.restaurantordertracker.data.dto.LoginResponse
+import com.cagataysunal.restaurantordertracker.data.dto.OrderData
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterRestaurantRequest
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterUserResponse
 import com.cagataysunal.restaurantordertracker.data.dto.RestaurantListResponse
@@ -82,18 +84,18 @@ class ApiServiceImpl(private val client: HttpClient) : ApiService {
         }
     }
 
-    override suspend fun getOrders(): Boolean {
+    override suspend fun getOrders(): List<OrderData> {
         return try {
-            val response: HttpResponse = client.get(ApiEndpoints.GET_ORDERS)
-            if (response.status.isSuccess()) {
-                Timber.d("order list request successful")
+            val response = client.get(ApiEndpoints.GET_ORDERS).body<GetOrdersResponse>()
+            if (response.success) {
+                response.data
             } else {
-                Timber.w("order list request failed with status ${response.status}: ${response.bodyAsText()}")
+                Timber.w("Get orders request was not successful: ${response.message}")
+                emptyList()
             }
-            response.status.isSuccess()
         } catch (e: Exception) {
             Timber.e(e, "order list request failed: ${e.message}")
-            false
+            emptyList()
         }
     }
 

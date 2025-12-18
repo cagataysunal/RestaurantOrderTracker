@@ -17,7 +17,7 @@ class OrderDetailViewModel(
 
     fun rejectOrder(orderId: String) {
         viewModelScope.launch {
-            updateOrderStatusUseCase(orderId, "cancelled")
+            updateOrderStatusUseCase(orderId, "rejected")
         }
     }
 }

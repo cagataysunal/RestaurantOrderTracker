@@ -28,7 +28,7 @@ class OrdersViewModel(
 
     fun getOrders() {
         viewModelScope.launch {
-            getOrdersUseCase()
+            _orders.value = getOrdersUseCase()
         }
     }
 
@@ -44,7 +44,9 @@ class OrdersViewModel(
     private fun listenForOrderUpdates() {
         pusherManager.orderUpdates
             .onEach { newOrder ->
-                _orders.value += newOrder
+                if (_orders.value.none { it.orderId == newOrder.orderId }) {
+                    _orders.value += newOrder
+                }
             }
             .launchIn(viewModelScope)
     }
