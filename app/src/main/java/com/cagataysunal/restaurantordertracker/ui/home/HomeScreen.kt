@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -31,8 +30,8 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun HomeScreenContent(navController: NavController) {
     var selectedItem by remember { mutableIntStateOf(0) }
-    val items = listOf("Orders", "My Page", "Options")
-    val icons = listOf(Icons.AutoMirrored.Filled.List, Icons.Filled.Person, Icons.Filled.Settings)
+    val items = listOf("Orders", "My Page")
+    val icons = listOf(Icons.AutoMirrored.Filled.List, Icons.Filled.Person)
 
     Scaffold(
         bottomBar = {
@@ -52,7 +51,6 @@ fun HomeScreenContent(navController: NavController) {
             when (selectedItem) {
                 0 -> OrdersScreen(navController)
                 1 -> MyPageScreen()
-                2 -> Text("Options Screen") // Replace with your Options screen
             }
         }
     }

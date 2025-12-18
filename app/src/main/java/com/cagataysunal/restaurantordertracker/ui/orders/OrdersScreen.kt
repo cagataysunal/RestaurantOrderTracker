@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.cagataysunal.restaurantordertracker.data.dto.OrderUpdate
 import com.cagataysunal.restaurantordertracker.ui.navigation.Screen
-import kotlinx.serialization.json.Json
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -74,8 +73,7 @@ fun OrderItem(order: OrderUpdate, navController: NavController) {
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         onClick = {
-            val orderJson = Json.encodeToString(order)
-            navController.navigate(Screen.OrderDetail.createRoute(orderJson))
+            navController.navigate(Screen.OrderDetail.createRoute(order.uniqueCode))
         }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
