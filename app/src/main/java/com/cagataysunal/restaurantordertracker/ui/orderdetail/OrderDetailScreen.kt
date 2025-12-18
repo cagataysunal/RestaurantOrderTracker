@@ -23,7 +23,6 @@ import com.cagataysunal.restaurantordertracker.data.dto.DeliveryAddress
 import com.cagataysunal.restaurantordertracker.data.dto.OrderDetails
 import com.cagataysunal.restaurantordertracker.data.dto.OrderItem
 import com.cagataysunal.restaurantordertracker.data.dto.OrderUpdate
-import com.cagataysunal.restaurantordertracker.domain.usecase.UpdateOrderStatusUseCase
 import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -31,7 +30,7 @@ import org.koin.androidx.compose.koinViewModel
 fun OrderDetailScreen(
     navController: NavController,
     order: OrderUpdate,
-    viewModel: OrderDetailViewModel = koinViewModel()
+    viewModel: OrderDetailViewModel? = koinViewModel()
 ) {
     Column(
         modifier = Modifier
@@ -69,13 +68,13 @@ fun OrderDetailScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(onClick = {
-                viewModel.acceptOrder(order.uniqueCode)
+                viewModel?.acceptOrder(order.uniqueCode)
                 navController.popBackStack()
             }) {
                 Text(text = "Accept")
             }
             Button(onClick = {
-                viewModel.rejectOrder(order.uniqueCode)
+                viewModel?.rejectOrder(order.uniqueCode)
                 navController.popBackStack()
             }) {
                 Text(text = "Reject")
@@ -117,28 +116,13 @@ fun OrderDetailScreenPreview() {
         createdAt = "2024-01-01T12:00:00Z"
     )
 
-    // This is a mock. In a real app, you'd get this from Koin.
-    val mockViewModel = OrderDetailViewModel(
-        updateOrderStatusUseCase = object : UpdateOrderStatusUseCase(mock()) {
-            override suspend fun invoke(orderId: String, status: String): Boolean {
-                // Do nothing
-                return true
-            }
-        }
-    )
-
     RestaurantOrderTrackerTheme {
         OrderDetailScreen(
             navController = rememberNavController(),
             order = mockOrder,
-            viewModel = mockViewModel
+            viewModel = null
         )
     }
-}
-
-// Helper function for mocking, since we can't use a mocking library here.
-private fun <T> mock(): T {
-    return null as T
 }
 
 @Preview(showBackground = true, name = "Long Item List Preview")
@@ -172,19 +156,11 @@ fun OrderDetailScreenLongListPreview() {
         createdAt = "2024-01-01T13:00:00Z"
     )
 
-    val mockViewModel = OrderDetailViewModel(
-        updateOrderStatusUseCase = object : UpdateOrderStatusUseCase(mock()) {
-            override suspend fun invoke(orderId: String, status: String): Boolean {
-                return true
-            }
-        }
-    )
-
     RestaurantOrderTrackerTheme {
         OrderDetailScreen(
             navController = rememberNavController(),
             order = mockOrder,
-            viewModel = mockViewModel
+            viewModel = null
         )
     }
 }
