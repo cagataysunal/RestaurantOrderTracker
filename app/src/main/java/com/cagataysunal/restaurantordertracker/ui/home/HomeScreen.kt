@@ -22,9 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
     HomeScreenContent()
 }
 
