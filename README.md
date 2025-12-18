@@ -135,20 +135,20 @@ password: password123
 
 ### Welcome, Register and Login Screens
 
-![welcome_screen.png](Screenshots/welcome_screen.png)
-![register_new_user_screen.png](Screenshots/register_screen.png)
-![sign_in.png](Screenshots/sign_in.png)
+<img src="Screenshots/welcome_screen.png" alt="welcome_screen" width="300"/>
+<img src="Screenshots/register_screen.png" alt="register_new_user_screen" width="300"/>
+<img src="Screenshots/sign_in.png" alt="sign_in" width="300"/>
 
 ### Create a new restaurant flow
-![create_a_new_restaurant_1.png](Screenshots/create_a_new_restaurant_1.png)
-![create_a_new_restaurant_4.png](Screenshots/register_screen.png)
-![create_a_new_restaurant_2.png](Screenshots/create_a_new_restaurant_2.png)
-![create_a_new_restaurant_3.png](Screenshots/create_a_new_restaurant_3.png)
+<img src="Screenshots/create_a_new_restaurant_1.png" alt="create_a_new_restaurant_1" width="300"/>
+<img src="Screenshots/register_screen.png" alt="create_a_new_restaurant_4" width="300"/>
+<img src="Screenshots/create_a_new_restaurant_2.png" alt="create_a_new_restaurant_2" width="300"/>
+<img src="Screenshots/create_a_new_restaurant_3.png" alt="create_a_new_restaurant_3" width="300"/>
 
 ### Orders
-![orders_screen.png](Screenshots/orders_screen.png)
-![order_detail_screen.png](Screenshots/order_detail_screen.png)
-![map.png](Screenshots/map.png)
+<img src="Screenshots/orders_screen.png" alt="orders_screen" width="300"/>
+<img src="Screenshots/order_detail_screen.png" alt="order_detail_screen" width="300"/>
+<img src="Screenshots/map.png" alt="map" width="300"/>
 
 ### My Page
-![my_page.png](Screenshots/my_page.png)
+<img src="Screenshots/my_page.png" alt="my_page" width="300"/>
