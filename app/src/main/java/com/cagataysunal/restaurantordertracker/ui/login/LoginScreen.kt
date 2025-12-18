@@ -1,5 +1,6 @@
 package com.cagataysunal.restaurantordertracker.ui.login
 
+import android.util.Patterns
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -65,8 +66,21 @@ fun LoginContent(
     var passwordVisible by remember { mutableStateOf(false) }
 
     fun validate(): Boolean {
-        emailError = if (email.isBlank()) "Email is required" else null
-        passwordError = if (password.isBlank()) "Password is required" else null
+        emailError = if (email.isBlank()) {
+            "Email is required"
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            "Invalid email format"
+        } else {
+            null
+        }
+
+        passwordError = if (password.isBlank()) {
+            "Password is required"
+        } else if (password.length < 8) {
+            "Password must be at least 8 characters"
+        } else {
+            null
+        }
         return emailError == null && passwordError == null
     }
 
