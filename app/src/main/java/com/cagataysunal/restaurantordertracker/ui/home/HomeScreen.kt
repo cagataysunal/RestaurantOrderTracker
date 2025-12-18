@@ -1,8 +1,6 @@
 package com.cagataysunal.restaurantordertracker.ui.home
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -18,14 +16,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.cagataysunal.restaurantordertracker.ui.mypage.MyPageScreen
 import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
+fun HomeScreen() {
     HomeScreenContent()
 }
 
@@ -49,14 +46,12 @@ fun HomeScreenContent() {
             }
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("Home Screen")
+        Box(modifier = Modifier.padding(innerPadding)) {
+            when (selectedItem) {
+                0 -> Text("Orders Screen") // Replace with your Orders screen
+                1 -> MyPageScreen()
+                2 -> Text("Options Screen") // Replace with your Options screen
+            }
         }
     }
 }

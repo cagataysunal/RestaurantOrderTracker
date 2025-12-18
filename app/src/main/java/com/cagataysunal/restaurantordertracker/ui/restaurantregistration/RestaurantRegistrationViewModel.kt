@@ -47,7 +47,7 @@ class RestaurantRegistrationViewModel(
         viewModelScope.launch {
             _uiState.value = RestaurantRegistrationUIState.Loading
             val result = registerRestaurantUseCase(request)
-            if (result.restaurantId != "-1") {
+            if (result) {
                 _uiState.value = RestaurantRegistrationUIState.Success
             } else {
                 _uiState.value = RestaurantRegistrationUIState.Error("Registration failed")

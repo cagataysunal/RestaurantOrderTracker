@@ -4,15 +4,18 @@ import com.cagataysunal.restaurantordertracker.data.dto.LoginRequest
 import com.cagataysunal.restaurantordertracker.data.dto.LoginResponse
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterRestaurantRequest
 import com.cagataysunal.restaurantordertracker.data.dto.RegisterUserResponse
-import com.cagataysunal.restaurantordertracker.data.dto.RestaurantInfo
+import com.cagataysunal.restaurantordertracker.data.dto.RestaurantListResponse
 import com.cagataysunal.restaurantordertracker.data.dto.UserRegistrationRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import timber.log.Timber
 
 private const val TAG = "ApiServiceImpl"
@@ -52,24 +55,29 @@ class ApiServiceImpl(private val client: HttpClient) : ApiService {
         }
     }
 
-    override suspend fun getRestaurantInfo(): RestaurantInfo? {
+    override suspend fun getRestaurants(): RestaurantListResponse? {
         return try {
-            client.get(ApiEndpoints.RESTAURANT).body<RestaurantInfo>()
+            client.get(ApiEndpoints.RESTAURANT).body<RestaurantListResponse>()
         } catch (e: Exception) {
             Timber.tag(TAG).e(e, "Failed to get restaurant info: ${e.message}")
             null
         }
     }
 
-    override suspend fun registerRestaurant(request: RegisterRestaurantRequest): RestaurantInfo {
+
+    override suspend fun registerRestaurant(request: RegisterRestaurantRequest): Boolean {
         return try {
-            client.post(ApiEndpoints.RESTAURANT) {
+            val response: HttpResponse = client.post(ApiEndpoints.RESTAURANT) {
                 contentType(ContentType.Application.Json)
                 setBody(request)
-            }.body<RestaurantInfo>()
+            }
+            if (!response.status.isSuccess()) {
+                Timber.tag(TAG).w("Restaurant registration failed with status ${response.status}: ${response.bodyAsText()}")
+            }
+            response.status.isSuccess()
         } catch (e: Exception) {
             Timber.tag(TAG).e(e, "Restaurant registration failed: ${e.message}")
-            RestaurantInfo(restaurantId = "-1")
+            false
         }
     }
 }

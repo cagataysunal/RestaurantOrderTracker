@@ -5,6 +5,7 @@ import com.cagataysunal.restaurantordertracker.data.repository.RestaurantReposit
 import com.cagataysunal.restaurantordertracker.data.repository.UserRepositoryImpl
 import com.cagataysunal.restaurantordertracker.domain.repository.RestaurantRepository
 import com.cagataysunal.restaurantordertracker.domain.repository.UserRepository
+import com.cagataysunal.restaurantordertracker.domain.usecase.GetRestaurantInfoUseCase
 import com.cagataysunal.restaurantordertracker.domain.usecase.LoginUserUseCase
 import com.cagataysunal.restaurantordertracker.domain.usecase.RegisterRestaurantUseCase
 import com.cagataysunal.restaurantordertracker.domain.usecase.RegisterUserUseCase
@@ -18,4 +19,5 @@ val appModule = module {
     factory { RegisterUserUseCase(get()) }
     factory { LoginUserUseCase(get()) }
     factory { RegisterRestaurantUseCase(get()) }
+    factory { GetRestaurantInfoUseCase(get()) }
 }
