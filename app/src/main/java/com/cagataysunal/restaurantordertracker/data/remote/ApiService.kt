@@ -12,4 +12,5 @@ interface ApiService {
     suspend fun login(request: LoginRequest): LoginResponse
     suspend fun getRestaurants(): RestaurantListResponse?
     suspend fun registerRestaurant(request: RegisterRestaurantRequest): Boolean
+    suspend fun getOrders(): Boolean
 }

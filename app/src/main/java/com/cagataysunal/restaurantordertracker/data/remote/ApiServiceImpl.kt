@@ -80,4 +80,19 @@ class ApiServiceImpl(private val client: HttpClient) : ApiService {
             false
         }
     }
+
+    override suspend fun getOrders(): Boolean {
+        return try {
+            val response: HttpResponse = client.get(ApiEndpoints.GET_ORDERS)
+            if (response.status.isSuccess()) {
+                Timber.d("order list request successful")
+            } else {
+                Timber.w("order list request failed with status ${response.status}: ${response.bodyAsText()}")
+            }
+            response.status.isSuccess()
+        } catch (e: Exception) {
+            Timber.e(e, "order list request failed: ${e.message}")
+            false
+        }
+    }
 }

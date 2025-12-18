@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.cagataysunal.restaurantordertracker.ui.mypage.MyPageScreen
+import com.cagataysunal.restaurantordertracker.ui.orders.OrdersScreen
 import com.cagataysunal.restaurantordertracker.ui.theme.RestaurantOrderTrackerTheme
 
 @Composable
@@ -48,7 +49,7 @@ fun HomeScreenContent() {
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedItem) {
-                0 -> Text("Orders Screen") // Replace with your Orders screen
+                0 -> OrdersScreen()
                 1 -> MyPageScreen()
                 2 -> Text("Options Screen") // Replace with your Options screen
             }
