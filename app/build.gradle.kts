@@ -89,11 +89,12 @@ dependencies {
     implementation(libs.mapbox.compose)
 
     // Mapbox Search
+    implementation(libs.mapbox.search.autofill)
+    implementation(libs.mapbox.search.discover)
     implementation(libs.mapbox.search.place.autocomplete)
     implementation(libs.mapbox.search.offline)
-
-    // Mapbox Navigation
-    implementation(libs.mapbox.navigation)
+    implementation(libs.mapbox.search.android)
+    implementation(libs.mapbox.search.android.ui)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
