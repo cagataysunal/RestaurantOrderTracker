@@ -84,9 +84,13 @@ dependencies {
     // Timber for logging
     implementation(libs.timber)
 
-    // Mapbox
+    // Mapbox Core
     implementation(libs.mapbox)
     implementation(libs.mapbox.compose)
+
+    // Mapbox Search
+    implementation(libs.mapbox.search.place.autocomplete)
+    implementation(libs.mapbox.search.offline)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

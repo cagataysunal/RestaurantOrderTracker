@@ -17,6 +17,7 @@ navigationCompose = "2.9.6"
 pusher = "2.4.4"
 timber = "5.0.1"
 mapbox = "11.17.1"
+mapboxSearch = "2.17.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +50,8 @@ pusher-java-client = { module = "com.pusher:pusher-java-client", version.ref = "
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 mapbox = { module = "com.mapbox.maps:android-ndk27", version.ref = "mapbox" }
 mapbox-compose = { module = "com.mapbox.extension:maps-compose-ndk27", version.ref = "mapbox" }
+mapbox-search-offline = { module = "com.mapbox.search:offline-ndk27", version.ref = "mapboxSearch" }
+mapbox-search-place-autocomplete = { module = "com.mapbox.search:place-autocomplete-ndk27", version.ref = "mapboxSearch" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
